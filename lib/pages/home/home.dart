@@ -16,9 +16,11 @@ class _HomePageState extends State<HomePage> {
   setState(() {
     isloading = true;
   });
-  var res = await http.get(FMDBConfig.url, headers : {"Authorization": FMDBConfig.accessToken});
+  var res = await http.get(FMDBConfig.url+FMDBConfig.movieEndpoint, headers : {"Authorization": FMDBConfig.accessToken});
   setState(() {
+
     m = res.body;
+    isloading = false;
   });
   var decoded = jsonDecode(res.body);
   }
