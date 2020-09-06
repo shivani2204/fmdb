@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fmdb/constants/config.dart';
+import 'package:fmdb/providers/models/upcomingmovies.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -11,22 +12,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
  bool isloading = false;
- String m ="";
-  void fetchMovies() async {
+ UpcomingMovies  fmdbupcoming;
+  upcomingMovies() async {
   setState(() {
     isloading = true;
   });
-  var res = await http.get(FMDBConfig.url+FMDBConfig.movieEndpoint, headers : {"Authorization": FMDBConfig.accessToken});
+  var res = await http.get(FMDBConfig.url+FMDBConfig.upcomingMovies, headers : {"Authorization": FMDBConfig.accessToken});
+ 
+  var decoded = jsonDecode(res.body);
+  fmdbupcoming = UpcomingMovies.fromJson(decoded);
   setState(() {
-
-    m = res.body;
     isloading = false;
   });
-  var decoded = jsonDecode(res.body);
   }
   @override
   void initState() {
-    fetchMovies();
+    upcomingMovies();
     super.initState();
   }
   @override
@@ -38,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(appBar: AppBar(title:Text('My First App')),
     body: isloading ? Center(child: CircularProgressIndicator(),) : Center(
-      child: Text(m)
+      child: Image(image: NetworkImage(FMDBConfig.originalImage + fmdbupcoming.results[3].posterPath)) 
       
     )
     );
