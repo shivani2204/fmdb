@@ -9,7 +9,7 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
-
+ 
 class _HomePageState extends State<HomePage> {
  bool isloading = false;
  UpcomingMovies  fmdbupcoming;
@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
     isloading = false;
   });
   }
+  
   @override
   void initState() {
     upcomingMovies();
@@ -37,11 +38,22 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title:Text('My First App')),
-    body: isloading ? Center(child: CircularProgressIndicator(),) : Center(
-      child: Image(image: NetworkImage(FMDBConfig.originalImage + fmdbupcoming.results[3].posterPath)) 
-      
+    return Scaffold(appBar: AppBar(title:Text('my first app')),
+    body: isloading ? Center(child: CircularProgressIndicator(),) : 
+    ListView.separated(
+                itemCount: fmdbupcoming.results.length,
+                separatorBuilder: (context, index) => Divider(),
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: Image(
+                      image: NetworkImage(FMDBConfig.originalImage + fmdbupcoming.results[index].posterPath),
+                      height: 40,
+                      width: 40,
+                    ),
+                    title: Text('${fmdbupcoming.results[index].title}'),
+                  );
+                },
     )
-    );
+  );                
   }
 }
