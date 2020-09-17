@@ -40,20 +40,25 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(appBar: AppBar(title:Text('my first app')),
     body: isloading ? Center(child: CircularProgressIndicator(),) : 
-    ListView.separated(
-                itemCount: fmdbupcoming.results.length,
-                separatorBuilder: (context, index) => Divider(),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Image(
-                      image: NetworkImage(FMDBConfig.originalImage + fmdbupcoming.results[index].posterPath),
-                      height: 40,
-                      width: 40,
-                    ),
-                    title: Text('${fmdbupcoming.results[index].title}'),
-                  );
-                },
-    )
+    GridView.count(
+                crossAxisCount: 2,
+                childAspectRatio: 0.6,
+                mainAxisSpacing: 6.0,
+                crossAxisSpacing: 6.0,
+                children: List.generate(
+                  fmdbupcoming.results.length,
+                  (index) {
+                    var boxFit = BoxFit.fill;
+                    return Center(
+                      child: Image(
+                        image:
+                            NetworkImage(FMDBConfig.originalImage + fmdbupcoming.results[index].posterPath),
+                        fit: boxFit,
+                      ),
+                    );
+                  },
+                ),
+              )
   );                
   }
 }
